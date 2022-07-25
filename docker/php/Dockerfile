@@ -22,10 +22,11 @@ RUN apt-get update && \
   composer config -g process-timeout 3600 && \
   composer config -g repos.packagist composer https://packagist.org
 
-RUN pecl install memcached \
-  && docker-php-ext-enable memcached
+RUN pecl install memcached xdebug\
+  && docker-php-ext-enable memcached xdebug
 
-COPY ./docker/php/php.ini /usr/local/etc/php/
+COPY ./docker/php/php.dev.ini /usr/local/etc/php/php.ini
+# COPY ./docker/php/php.ini /usr/local/etc/php/
 # confを上書き。余計なlog出さないように、access.logを変更している
 COPY ./docker/php/docker.conf /usr/local/etc/php-fpm.d
 COPY ./backend/composer.json ${WORKDIR}/
