@@ -7,11 +7,13 @@ init_laravel:
 build_initializer:
 	docker build -t laravel_initializer ./scripts/init
 
+build:
+	docker-compose build
+
 up:
 	docker-compose up -d
 
 down:
 	docker-compose down
 
-.PHONY: build_initializer init_laravel up down
-
+.PHONY: build_initializer init_laravel build up down
