@@ -1,3 +1,4 @@
+# MEMO: contextはrotディレクトリにある想定で記載
 FROM php:8.1-fpm
 ENV WORKDIR=/var/www/html
 WORKDIR $WORKDIR
@@ -5,11 +6,10 @@ WORKDIR $WORKDIR
 ENV COMPOSER_ALLOW_SUPERUSER=1 \
   COMPOSER_HOME=/composer
 
-
 ARG UID=1000
 ARG GID=1000
 
-COPY --from=composer:2.3.10 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.3.9 /usr/bin/composer /usr/bin/composer
 
 RUN apt-get update && \
   apt-get -y install git libicu-dev libonig-dev libzip-dev unzip locales libmemcached-dev && \
@@ -25,13 +25,13 @@ RUN apt-get update && \
 RUN pecl install memcached \
   && docker-php-ext-enable memcached
 
-
 COPY ./docker/php/php.ini /usr/local/etc/php/
 # confを上書き。余計なlog出さないように、access.logを変更している
 COPY ./docker/php/docker.conf /usr/local/etc/php-fpm.d
-COPY ./laravel/composer.json ${WORKDIR}/
-COPY ./laravel/composer.lock ${WORKDIR}/
-COPY ./laravel ${WORKDIR}/
+COPY ./backend/composer.json ${WORKDIR}/
+COPY ./backend/composer.lock ${WORKDIR}/
+
+COPY ./backend ${WORKDIR}/
 
 RUN composer install --no-progress
 # php-fpmのuserが書き込むディレクトリに権限つけておく

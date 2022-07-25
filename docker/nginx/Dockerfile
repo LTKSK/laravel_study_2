@@ -6,7 +6,7 @@ RUN apk update && \
 # ecsで動かす時のhost。開発時はcomposeでappという値で置き換える
 ENV PHP_HOST=127.0.0.1
 
-COPY ./docker/nginx/default.conf /etc/nginx/conf.d/default.conf.template
+COPY ./default.conf /etc/nginx/conf.d/default.conf.template
 
 EXPOSE 80
 # 中身を置き換え
