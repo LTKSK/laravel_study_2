@@ -34,7 +34,7 @@ export const RegisterPage = () => {
             })}
           />
         </div>
-        {errors.email && "emailは必須です"}
+        <p className="text-red-600">{errors.email && "emailは必須です"}</p>
         <label>Password</label>
         <input
           className="shadow borderd rounded appearance-none w-full py-2 px-3"
@@ -46,13 +46,19 @@ export const RegisterPage = () => {
             minLength: 16,
           })}
         />
-        {errors.email && "passwordは必須です"}
-        {errors.email?.type === "maxLength" &&
-          "passwordは64文字以下である必要があります"}
-        {errors.email?.type === "minLength" &&
-          "passwordは16文字以上である必要があります"}
+        <p className="text-red-600">
+          {errors.password && "passwordは必須です"}
+        </p>
+        <p className="text-red-600">
+          {errors.password?.type === "maxLength" &&
+            "passwordは64文字以下である必要があります"}
+        </p>
+        <p className="text-red-600">
+          {errors.password?.type === "minLength" &&
+            "passwordは16文字以上である必要があります"}
+        </p>
         <input
-          className="w-full block rounded py-2 px-3 mt-3 font-bold bg-blue-400"
+          className="w-full block rounded py-2 px-3 mt-3 font-bold bg-blue-400 hover:bg-green-300 cursor-pointer"
           type="submit"
           value="登録"
         />
