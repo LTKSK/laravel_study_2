@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App";
+import { App } from "./App";
 import "./index.css";
 import { ReactLocation, Router } from "@tanstack/react-location";
 import { RegisterPage } from "./components/RegisterPage";
