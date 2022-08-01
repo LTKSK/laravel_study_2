@@ -22,11 +22,11 @@ services:
     build:
       context: ./docker/mysql
     environment:
-      - "TZ=Asia/Tokyo"
-      - "MYSQL_DATABASE=laravel"
-      - "MYSQL_USER=laravel"
-      - "MYSQL_PASSWORD=laravel"
-      - "MYSQL_ROOT_PASSWORD=root"
+      TZ: "Asia/Tokyo"
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: laravel
     ports:
       - 3306:3306
     volumes:
