@@ -18,7 +18,7 @@ export const RegisterPage = () => {
   const onSubmit: SubmitHandler<Input> = (data) => console.log(data);
 
   return (
-    <div className="lg:container shadow-md flex flex-col px-8 pt-6 pb-8 mb-4 bg-white mx-auto text-left rounded-xl shadow-slate-400 ">
+    <div className="lg:container shadow-md flex flex-col px-8 pt-6 pb-8 bg-white mx-auto text-left rounded-xl shadow-slate-400 ">
       <h1 className="text-4xl mb-4">新規登録</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4">
@@ -58,7 +58,7 @@ export const RegisterPage = () => {
             "passwordは16文字以上である必要があります"}
         </p>
         <input
-          className="w-full block rounded py-2 px-3 mt-3 font-bold bg-blue-400 hover:bg-green-300 cursor-pointer"
+          className="text-white hover:text-black w-full block rounded py-2 px-3 mt-3 font-bold bg-blue-400 hover:bg-green-300 cursor-pointer"
           type="submit"
           value="登録"
         />
