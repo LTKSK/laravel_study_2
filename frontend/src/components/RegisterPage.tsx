@@ -4,6 +4,7 @@ type Input = {
   name: string;
   email: string;
   password: string;
+  passwordConfirmation: string;
 };
 
 const EMAIL_VALIDATE_PATTERN =
@@ -18,13 +19,19 @@ export const RegisterPage = () => {
 
   const onSubmit: SubmitHandler<Input> = (data) => {
     console.log(data);
-    fetch("http://127.0.0.1:8000/register", {
+    fetch("http://127.0.0.1:8000/api/register", {
       method: "POST",
       mode: "cors",
       headers: {
+        Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify({
+        name: data.name,
+        email: data.email,
+        password: data.password,
+        password_confirmation: data.passwordConfirmation,
+      }),
     })
       .then((resp) => console.log(resp))
       .catch((err) => console.error(err));
@@ -97,6 +104,32 @@ export const RegisterPage = () => {
           {errors.password?.type === "minLength" &&
             "passwordは16文字以上である必要があります"}
         </p>
+
+        <div className="mb4">
+          <label>Password確認</label>
+          <input
+            className="shadow borderd rounded appearance-none w-full py-2 px-3"
+            placeholder="enter your password"
+            type="password"
+            {...register("passwordConfirmation", {
+              required: true,
+              maxLength: 64,
+              minLength: 16,
+            })}
+          />
+        </div>
+        <p className="text-red-600">
+          {errors.passwordConfirmation && "passwordは必須です"}
+        </p>
+        <p className="text-red-600">
+          {errors.passwordConfirmation?.type === "maxLength" &&
+            "passwordは64文字以下である必要があります"}
+        </p>
+        <p className="text-red-600">
+          {errors.passwordConfirmation?.type === "minLength" &&
+            "passwordは16文字以上である必要があります"}
+        </p>
+
         <input
           className="text-white hover:text-black w-full block rounded py-2 px-3 mt-3 font-bold bg-blue-400 hover:bg-green-300 cursor-pointer"
           type="submit"

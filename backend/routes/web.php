@@ -20,5 +20,3 @@ Route::get('/', function () {
 Route::get('/phpinfo', function () {
     return phpinfo();
 });
-
-require __DIR__.'/auth.php';
