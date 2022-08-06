@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,7 +22,9 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                return redirect(RouteServiceProvider::HOME);
+                // SPAで認証するので、以下の処理でhomeに飛ばれるとこまってしまうわけ
+                // return redirect(RouteServiceProvider::HOME);
+                return response()->json(Auth::user(), 200);
             }
         }
 
