@@ -15,7 +15,27 @@ export const LoginPage = () => {
     formState: { errors },
   } = useForm<Input>();
 
-  const onSubmit: SubmitHandler<Input> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<Input> = async (data) => {
+    try {
+      const resp = await fetch("http://127.0.0.1:8000/api/login", {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          email: data.email,
+          password: data.password,
+        }),
+      });
+      console.log(resp);
+      console.log(await fetch("http://127.0.0.1:8000/api/user"));
+    } catch (error: unknown) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="lg:container shadow-md flex flex-col px-8 pt-6 pb-8 bg-white mx-auto text-left rounded-xl shadow-slate-400 ">
@@ -43,7 +63,7 @@ export const LoginPage = () => {
           {...register("password", {
             required: true,
             maxLength: 64,
-            minLength: 16,
+            minLength: 8,
           })}
         />
         <p className="text-red-600">
@@ -55,7 +75,7 @@ export const LoginPage = () => {
         </p>
         <p className="text-red-600">
           {errors.password?.type === "minLength" &&
-            "passwordは16文字以上である必要があります"}
+            "passwordは8文字以上である必要があります"}
         </p>
         <input
           className="text-white hover:text-black w-full block rounded py-2 px-3 mt-3 font-bold bg-blue-400 hover:bg-green-300 cursor-pointer"

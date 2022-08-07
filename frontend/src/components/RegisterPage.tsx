@@ -17,24 +17,35 @@ export const RegisterPage = () => {
     formState: { errors },
   } = useForm<Input>();
 
-  const onSubmit: SubmitHandler<Input> = (data) => {
-    console.log(data);
-    fetch("http://127.0.0.1:8000/api/register", {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: data.name,
-        email: data.email,
-        password: data.password,
-        password_confirmation: data.passwordConfirmation,
-      }),
-    })
-      .then((resp) => console.log(resp))
-      .catch((err) => console.error(err));
+  const onSubmit: SubmitHandler<Input> = async (data) => {
+    await fetch("/sanctum/csrf-cookie", {
+      method: "GET",
+      credentials: "include",
+    }).then(console.log);
+    console.log(document.cookie);
+
+    try {
+      const resp = await fetch("http://127.0.0.1:8000/api/register", {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          name: data.name,
+          email: data.email,
+          password: data.password,
+          password_confirmation: data.passwordConfirmation,
+        }),
+      });
+      console.log(resp);
+    } catch (error: unknown) {
+      console.error(error);
+    }
+
+    // fetch("http://127.0.0.1:8000/api/user");
   };
 
   return (
@@ -89,7 +100,7 @@ export const RegisterPage = () => {
             {...register("password", {
               required: true,
               maxLength: 64,
-              minLength: 16,
+              minLength: 8,
             })}
           />
         </div>
@@ -102,7 +113,7 @@ export const RegisterPage = () => {
         </p>
         <p className="text-red-600">
           {errors.password?.type === "minLength" &&
-            "passwordは16文字以上である必要があります"}
+            "passwordは8文字以上である必要があります"}
         </p>
 
         <div className="mb4">
@@ -114,7 +125,7 @@ export const RegisterPage = () => {
             {...register("passwordConfirmation", {
               required: true,
               maxLength: 64,
-              minLength: 16,
+              minLength: 8,
             })}
           />
         </div>
@@ -127,7 +138,7 @@ export const RegisterPage = () => {
         </p>
         <p className="text-red-600">
           {errors.passwordConfirmation?.type === "minLength" &&
-            "passwordは16文字以上である必要があります"}
+            "passwordは8文字以上である必要があります"}
         </p>
 
         <input
