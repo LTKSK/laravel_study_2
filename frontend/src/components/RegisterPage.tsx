@@ -18,14 +18,14 @@ export const RegisterPage = () => {
   } = useForm<Input>();
 
   const onSubmit: SubmitHandler<Input> = async (data) => {
-    await fetch("/sanctum/csrf-cookie", {
+    await fetch("http://localhost:8000/sanctum/csrf-cookie", {
       method: "GET",
       credentials: "include",
     }).then(console.log);
     console.log(document.cookie);
 
     try {
-      const resp = await fetch("http://127.0.0.1:8000/api/register", {
+      const resp = await fetch("http://localhost:8000/api/register", {
         method: "POST",
         mode: "cors",
         headers: {
@@ -44,8 +44,6 @@ export const RegisterPage = () => {
     } catch (error: unknown) {
       console.error(error);
     }
-
-    // fetch("http://127.0.0.1:8000/api/user");
   };
 
   return (

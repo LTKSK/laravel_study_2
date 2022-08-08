@@ -8,6 +8,14 @@ type Input = {
 const EMAIL_VALIDATE_PATTERN =
   /^[a-zA-Z0-9_+-]+(.[a-zA-Z0-9_+-]+)*@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\.)+[a-zA-Z]{2,}$/;
 
+const extractXsrfTokenFromCookie = (): string | null => {
+  const xsrfTokenCookie = document.cookie
+    .split("; ")
+    .find((param) => param.startsWith("XSRF-TOKEN"));
+  if (xsrfTokenCookie === undefined) return null;
+  return decodeURIComponent(xsrfTokenCookie.replace("XSRF-TOKEN=", ""));
+};
+
 export const LoginPage = () => {
   const {
     register,
@@ -16,13 +24,24 @@ export const LoginPage = () => {
   } = useForm<Input>();
 
   const onSubmit: SubmitHandler<Input> = async (data) => {
+    await fetch("http://localhost:8000/sanctum/csrf-cookie", {
+      method: "GET",
+      credentials: "include",
+    });
+    const token = extractXsrfTokenFromCookie();
+    if (token === null) {
+      alert("認証に必要なTokenが取得できなかった");
+      return;
+    }
+
     try {
-      const resp = await fetch("http://127.0.0.1:8000/api/login", {
+      await fetch("http://localhost:8000/login", {
         method: "POST",
         mode: "cors",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
+          "X-XSRF-TOKEN": token,
         },
         credentials: "include",
         body: JSON.stringify({
@@ -30,8 +49,7 @@ export const LoginPage = () => {
           password: data.password,
         }),
       });
-      console.log(resp);
-      console.log(await fetch("http://127.0.0.1:8000/api/user"));
+      // console.log(await fetch("http://localhost:8000/api/user"));
     } catch (error: unknown) {
       console.error(error);
     }
