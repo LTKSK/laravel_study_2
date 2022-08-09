@@ -51,11 +51,8 @@ export const LoginPage = () => {
       });
       console.log(
         await fetch("http://localhost:8000/api/user", {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            "X-XSRF-TOKEN": token,
-          },
+          mode: "cors",
+          credentials: "include",
         })
       );
     } catch (error: unknown) {
