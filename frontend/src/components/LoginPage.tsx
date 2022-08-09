@@ -49,7 +49,15 @@ export const LoginPage = () => {
           password: data.password,
         }),
       });
-      // console.log(await fetch("http://localhost:8000/api/user"));
+      console.log(
+        await fetch("http://localhost:8000/api/user", {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            "X-XSRF-TOKEN": token,
+          },
+        })
+      );
     } catch (error: unknown) {
       console.error(error);
     }
