@@ -1,4 +1,5 @@
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useNavigate } from "@tanstack/react-location";
 
 type Input = {
   email: string;
@@ -23,9 +24,10 @@ export const LoginPage = () => {
     formState: { errors },
   } = useForm<Input>();
 
+  const navigate = useNavigate();
+
   const onSubmit: SubmitHandler<Input> = async (data) => {
     await fetch("http://localhost:8000/sanctum/csrf-cookie", {
-      method: "GET",
       credentials: "include",
     });
     const token = extractXsrfTokenFromCookie();
@@ -49,12 +51,7 @@ export const LoginPage = () => {
           password: data.password,
         }),
       });
-      console.log(
-        await fetch("http://localhost:8000/api/user", {
-          mode: "cors",
-          credentials: "include",
-        })
-      );
+      navigate({ to: "/" });
     } catch (error: unknown) {
       console.error(error);
     }
